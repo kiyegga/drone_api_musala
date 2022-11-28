@@ -20,8 +20,8 @@ public class DroneController {
     }
 
 
-    @GetMapping("get-idle-drone")
-    public List<Drone> getIdleDrone(){
-        return droneService.getIdleDrones();
-    }
+//    @GetMapping("get-idle-drone")
+//    public List<Drone> getIdleDrone(){
+//        return droneService.getIdleDrones();
+//    }
 }

@@ -19,7 +19,7 @@ public class DroneService {
     }
 
 
-    public List<Drone> getIdleDrones() {
-        return droneRepository.findIdleDrones();
-    }
+//    public List<Drone> getIdleDrones() {
+//        return droneRepository.findIdleDrones();
+//    }
 }
