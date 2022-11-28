@@ -28,4 +28,9 @@ public class Drone {
     @OneToMany(mappedBy = "drone")
     private List<DroneBatteryLevel> droneBatteryLevel = new ArrayList<>();
 
+    //one to many relationship with DroneActivities table
+    @JsonIgnore
+    @OneToMany(mappedBy = "drone")
+    private List<DroneActivities> droneActivities = new ArrayList<>();
+
 }
