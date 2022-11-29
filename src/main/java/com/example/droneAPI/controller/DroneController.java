@@ -24,6 +24,7 @@ public class DroneController {
     //    loading a drone with medication items;
     @PostMapping("load-idle-drone")
     public String loadIdleDrone(@RequestBody LoadDrone loadDrone){
+        droneService.loadIdleDrone(loadDrone);
      return "body request we received is "+ loadDrone.toString();
     }
 
