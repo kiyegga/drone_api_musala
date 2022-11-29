@@ -1,4 +1,4 @@
-package com.example.droneAPI.util;
+package com.example.droneAPI.utility;
 
 import lombok.Getter;
 import lombok.Setter;

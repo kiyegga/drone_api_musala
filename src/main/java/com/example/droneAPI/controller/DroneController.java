@@ -2,7 +2,7 @@ package com.example.droneAPI.controller;
 
 import com.example.droneAPI.model.Drone;
 import com.example.droneAPI.service.DroneService;
-import com.example.droneAPI.util.LoadDrone;
+import com.example.droneAPI.utility.LoadDrone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +21,7 @@ public class DroneController {
 
     }
 
+    //    loading a drone with medication items;
     @PostMapping("load-idle-drone")
     public String loadIdleDrone(@RequestBody LoadDrone loadDrone){
      return "body request we received is "+ loadDrone.toString();
@@ -37,7 +38,7 @@ public class DroneController {
         return droneService.checkBatteryLevel(droneSerialNumber);
 
     }
-//    loading a drone with medication items;
+
 //    checking loaded medication items for a given drone;
 
 
