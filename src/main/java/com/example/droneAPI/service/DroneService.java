@@ -2,7 +2,9 @@ package com.example.droneAPI.service;
 
 import com.example.droneAPI.exceptions.RequestNotFoundException;
 import com.example.droneAPI.model.Drone;
+import com.example.droneAPI.model.DroneActivities;
 import com.example.droneAPI.model.Medication;
+import com.example.droneAPI.repository.DroneActivityRepository;
 import com.example.droneAPI.repository.DroneRepository;
 import com.example.droneAPI.repository.MedicationRepository;
 import com.example.droneAPI.utility.LoadDrone;
@@ -18,6 +20,8 @@ public class DroneService {
     DroneRepository droneRepository;
     @Autowired
     MedicationRepository medicationRepository;
+    @Autowired
+    DroneActivityRepository droneActivityRepository;
 
 
 
@@ -31,13 +35,7 @@ public class DroneService {
         checkRequired(drone.getDroneSerialNumber());
         if(droneRepository.findDroneBySerialNumber(drone.getDroneSerialNumber())){
          return   "Drone with SerialNumber: "+drone.getDroneSerialNumber()+" already exists";
-          //  throw new RequestNotFoundException("Drone with SerialNumber: "+drone.getDroneSerialNumber()+" already exists");
         }
-//        Drone drone1 = droneRepository.findDroneBySerialNumber(drone.getDroneSerialNumber());
-//        if(drone1.getDroneSerialNumber() != null){
-//            return "Drone with SerialNumber "+drone1.getDroneSerialNumber()+" already existss";
-//        }
-
         droneRepository.save(drone);
         return "Drone "+drone.getDroneSerialNumber()+" was added successfully";
     }
@@ -47,40 +45,58 @@ public class DroneService {
     }
 
     public String checkBatteryLevel(String droneSerialNumber) {
-        droneRepository.findBatteryCapacityForSpecificDrone(droneSerialNumber);
-        Drone batterCapacityObject = droneRepository.findBatteryCapacityForSpecificDrone(droneSerialNumber);
+        droneRepository.getDroneObjBySerialNumber(droneSerialNumber);
+        Drone batterCapacityObject = droneRepository.getDroneObjBySerialNumber(droneSerialNumber);
         String bcapacity = String.valueOf(batterCapacityObject.getDroneBatteryCapacity() * 100) ;
         return "Drone "+droneSerialNumber+" has "+bcapacity+"% battery capacity";
 
     }
 
     public String loadIdleDrone(LoadDrone loadDrone) {
-//        "droneSerialNumber":"S0000000DR001",
-//                "medicationName":"dsffssf",
-//                "medicationWeight": 400,
-//                "medicationCode":"CD0001",
-//                "medicationImage":"gdssjsjjsj"
-        // System.out.println(droneSerialNumber);
         checkRequired(loadDrone.getDroneSerialNumber());
         if(!droneRepository.findDroneBySerialNumber(loadDrone.getDroneSerialNumber())){
             throw new RequestNotFoundException("Drone with SerialNumber:"+loadDrone.getDroneSerialNumber()+" to be loaded does not exists");
         }
+        Drone drone = droneRepository.getDroneObjBySerialNumber(loadDrone.getDroneSerialNumber());
+      //checking drone battery capacity
+        if((drone.getDroneBatteryCapacity() * 100) <= 25){
+            return "Drone "+loadDrone.getDroneSerialNumber()+" requires to be charged before being loaded";
+        }
+        //checking drone weight limit
+        if(loadDrone.getMedicationWeight() > drone.getDroneWeightLimit()){
+           return "Drone "+loadDrone.getDroneSerialNumber()+" can not weight exceeding "+drone.getDroneWeightLimit();
+        }
+        //object for medicine to be loaded
         Medication medication = new Medication();
         medication.setMedicationCode(loadDrone.getMedicationCode());
         medication.setMedicationImage(loadDrone.getMedicationImage());
         medication.setMedicationName(loadDrone.getMedicationName());
+        medication.setMedicationWeight(loadDrone.getMedicationWeight());
+        medicationRepository.save(medication);
 
-        // droneRepository.findDroneBySerialNumber(loadDrone.getDroneSerialNumber());
-        //System.out.println("check drone existance " + drone);
-        return "";
+        // find medicine by code
+        Medication medication1 = medicationRepository.findMedicationByCode(loadDrone.getMedicationCode());
+        //set drone activities
+        DroneActivities droneActivities = new DroneActivities();
+        droneActivities.setDrone(drone);
+        droneActivities.setMedication(medication1);
+        droneActivities.setCurrentStatus("Loaded");
+        droneActivityRepository.save(droneActivities);
+
+        // change drone state under Drone entity
+        //change status for both after sometime
+        // update batter capacity
+
+
+        return "Drone "+loadDrone.getDroneSerialNumber()+" is loaded successfully";
     }
 
 
 
 //    Functional requirements
-//    There is no need for UI;
-//    Prevent the drone from being loaded with more weight that it can carry;
-//    Prevent the drone from being in LOADING state if the battery level is below 25%;
+//    There is no need for UI;--
+//    Prevent the drone from being loaded with more weight that it can carry;--
+//    Prevent the drone from being in LOADING state if the battery level is below 25%;--
 //    Introduce a periodic task to check drones battery levels and create history/audit event log for this.
 
 
