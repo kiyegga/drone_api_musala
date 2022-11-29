@@ -15,7 +15,11 @@ public class DroneService {
 
     public String registerDrone(Drone drone) {
         droneRepository.save(drone);
-        return "Drone successfully added";
+        return "Drone "+drone.getDroneSerialNumber()+" was added successfully";
+    }
+
+    public List<Drone> availableDroneForLoadin() {
+        return droneRepository.findIdleDrones();
     }
 
 //    Functional requirements
