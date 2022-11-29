@@ -33,13 +33,13 @@ public class DroneController {
 
 
     @GetMapping("check-drone-batter/{droneSerialNumber}")
-    public String checkBatteryLevel(@PathVariable ){
+    public String checkBatteryLevel(@PathVariable String droneSerialNumber ){
+        return droneService.checkBatteryLevel(droneSerialNumber);
 
     }
 //    loading a drone with medication items;
 //    checking loaded medication items for a given drone;
 
-//    check drone battery level for a given drone;
 
 
 //    @GetMapping("get-idle-drone")

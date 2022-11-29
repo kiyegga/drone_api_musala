@@ -4,7 +4,6 @@ import com.example.droneAPI.model.Drone;
 import com.example.droneAPI.repository.DroneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -20,6 +19,15 @@ public class DroneService {
 
     public List<Drone> availableDroneForLoadin() {
         return droneRepository.findIdleDrones();
+    }
+
+    public String checkBatteryLevel(String droneSerialNumber) {
+       // System.out.println(droneSerialNumber);
+        droneRepository.findBatteryCapacityForSpecificDrone(droneSerialNumber);
+        Drone batterCapacityObject = droneRepository.findBatteryCapacityForSpecificDrone(droneSerialNumber);
+        String bcapacity = String.valueOf(batterCapacityObject.getDroneBatteryCapacity() * 100) ;
+        return "Drone "+droneSerialNumber+" has "+bcapacity+"% battery capacity";
+
     }
 
 //    Functional requirements
