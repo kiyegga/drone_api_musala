@@ -2,14 +2,20 @@ package com.example.droneAPI.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jdk.jfr.Timestamp;
-import lombok.Data;
+import lombok.*;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+//@Data
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class DroneBatteryLevel {
-    @javax.persistence.Id
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private  Long Id;
     private String serialNumber;

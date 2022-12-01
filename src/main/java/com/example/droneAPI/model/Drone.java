@@ -18,14 +18,19 @@ public class Drone {
     private Long Id;
     @Column(length = 100)
     @Size( max = 100, message = "Serial number should not exceed 100 characters")
-    private String serialNumber;
-    private String model;
-    private int weightLimit;
-    private Double batteryCapacity;
-    private String state;
+    private String droneSerialNumber;
+    private String droneModel;
+    private int droneWeightLimit;
+    private Double droneBatteryCapacity;
+    private String droneState;
     //one to many relationship with DroneBatteryLevel table
     @JsonIgnore
     @OneToMany(mappedBy = "drone")
     private List<DroneBatteryLevel> droneBatteryLevel = new ArrayList<>();
+
+    //one to many relationship with DroneActivities table
+    @JsonIgnore
+    @OneToMany(mappedBy = "drone")
+    private List<DroneActivities> droneActivities = new ArrayList<>();
 
 }
