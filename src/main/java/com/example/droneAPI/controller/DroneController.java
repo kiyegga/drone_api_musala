@@ -2,11 +2,13 @@ package com.example.droneAPI.controller;
 
 import com.example.droneAPI.model.Drone;
 import com.example.droneAPI.service.DroneService;
+import com.example.droneAPI.service.StatusUpdate;
 import com.example.droneAPI.utility.LoadDrone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/")
@@ -34,18 +36,20 @@ public class DroneController {
     }
 
 
-    @GetMapping("check-drone-batter/{droneSerialNumber}")
+    @GetMapping("check-drone-battery/{droneSerialNumber}")
     public String checkBatteryLevel(@PathVariable String droneSerialNumber ){
         return droneService.checkBatteryLevel(droneSerialNumber);
 
     }
 
 //    checking loaded medication items for a given drone;
+    @GetMapping("medicine-carried-by/{droneSerialNumber}")
+    public Map<String, Object> medicalItemOnDrone(@PathVariable String droneSerialNumber ){
+        return droneService.getMedicineOnSpecificDrone(droneSerialNumber);
+    }
 
-
-
-//    @GetMapping("get-idle-drone")
-//    public List<Drone> getIdleDrone(){
-//        return droneService.getIdleDrones();
-//    }
+    @PostMapping("update-batter-and-state")
+    public Drone updateBatteryAndStatus(@RequestBody StatusUpdate statusUpdate){
+         return droneService.updateBatterAndStatus(statusUpdate);
+    }
 }
