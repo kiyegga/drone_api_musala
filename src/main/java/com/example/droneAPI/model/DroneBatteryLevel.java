@@ -18,12 +18,11 @@ public class DroneBatteryLevel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private  Long Id;
-    private String serialNumber;
+//    private String serialNumber;
     private double batteryLevel;
     private LocalDateTime timestamp;
-
   //many to one relationship with drone table
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "droneId", referencedColumnName = "Id")
     private Drone drone;
 }
